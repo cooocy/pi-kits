@@ -1,3 +1,4 @@
+#!/usr/bin/python
 import psutil
 
 
@@ -6,12 +7,13 @@ class State:
     __1M = 1024 * 1024
     __1G = 1024 * 1024 * 1024
 
-    def __init__(self, cpu_count, cpu_percent,
+    def __init__(self, cpu_count, cpu_percent, cpu_temp,
                  mem_total, mem_free, mem_percent,
                  disk_total, disk_free, disk_percent,
                  net_send_p_second, net_recv_p_second):
         self.cpu_count = cpu_count
         self.cpu_percent = '%.2f%s' % (cpu_percent, '%')
+        self.cpu_temp = '%.0f%s' % (cpu_temp, '℃')
 
         self.mem_total = '%.2fMB' % (mem_total / State.__1M)
         self.mem_free = '%.2fMB' % (mem_free / State.__1M)
@@ -39,9 +41,9 @@ class State:
             self.net_recv = '%.2fB/s' % net_recv_p_second
 
     def __str__(self):
-        return 'State(cpu_count: %s, cpu_percent: %s, mem_total: %s, mem_free: %s, mem_percent: %s, disk_total: %s, ' \
+        return 'State(cpu_count: %s, cpu_percent: %s, cpu_temp: %s, mem_total: %s, mem_free: %s, mem_percent: %s, disk_total: %s, ' \
                'disk_free: %s, disk_percent: %s, net_sent: %s, net_recv: %s)' % (
-            self.cpu_count, self.cpu_percent, self.mem_total, self.mem_free, self.mem_percent, self.disk_total,
+            self.cpu_count, self.cpu_percent, self.cpu_temp, self.mem_total, self.mem_free, self.mem_percent, self.disk_total,
             self.disk_free, self.disk_percent, self.net_sent, self.net_recv)
 
 
@@ -66,6 +68,7 @@ def monitor(interval):
     # CPU
     cpu_count = psutil.cpu_count()
     cpu_percent = sum(psutil.cpu_percent(interval=interval, percpu=True)) / cpu_count
+    cpu_temp = psutil.sensors_temperatures()['cpu_thermal'][0].current
 
     # Memory
     memory = psutil.virtual_memory()
@@ -83,5 +86,8 @@ def monitor(interval):
     net_sent = psutil.net_io_counters().bytes_sent - sent_before
     net_recv = psutil.net_io_counters().bytes_recv - recv_before
 
-    return State(cpu_count, cpu_percent, mem_total, mem_free, mem_percent, disk_total, disk_free, disk_percent,
+    return State(cpu_count, cpu_percent, cpu_temp, mem_total, mem_free, mem_percent, disk_total, disk_free, disk_percent,
                  net_sent, net_recv)
+
+while True:
+    print(monitor(1))
