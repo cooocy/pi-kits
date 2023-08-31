@@ -8,7 +8,7 @@ from smb.SMBConnection import SMBConnection
 
 def mount_runes():
     f = os.system('mount /dev/sda /root/runes')
-    print('mount: %s' % f)
+    print('mount /dev/sda /root/runes: %s' % f)
     if f != 0:
         sys.exit(1)
 
@@ -53,8 +53,17 @@ def check_dns() -> bool:
 
 
 if __name__ == '__main__':
+    print('-------------------- Mount Runes')
     mount_runes()
-    restart_dns()
-    print("-------------------- Samba: %s" % check_samba())
     print('\n\n\n')
-    print("-------------------- DNS: %s" % check_dns())
+
+    print('-------------------- Restart DNS')
+    restart_dns()
+    print('\n\n\n')
+
+    print('-------------------- Check Samba')
+    print(check_samba())
+    print('\n\n\n')
+
+    print('-------------------- Check DNS')
+    print(check_dns())
