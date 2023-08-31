@@ -1,6 +1,7 @@
 #!/usr/bin/python
 import psutil
 import sys
+from datetime import datetime
 
 class State:
     __1K = 1024
@@ -61,6 +62,7 @@ def monitor(interval):
                  net_sent: 14.37KB/s, net_recv: 6259.00B/s)
     """
 
+    before = datetime.now()
     sent_before = psutil.net_io_counters().bytes_sent
     recv_before = psutil.net_io_counters().bytes_recv
 
@@ -76,7 +78,7 @@ def monitor(interval):
     mem_percent = memory.percent
 
     # Disk
-    disk = psutil.disk_usage('/')
+    disk = psutil.disk_usage('/root/runes')
     disk_total = disk.total
     disk_free = disk.free
     disk_percent = 100 * (disk_total - disk_free) / disk_total
@@ -84,9 +86,11 @@ def monitor(interval):
     # Network
     net_sent = psutil.net_io_counters().bytes_sent - sent_before
     net_recv = psutil.net_io_counters().bytes_recv - recv_before
+    now = datetime.now()
+    seconds = (now - before).seconds
 
     return State(cpu_count, cpu_percent, cpu_temp, mem_total, mem_free, mem_percent, disk_total, disk_free, disk_percent,
-                 net_sent, net_recv)
+                 net_sent / seconds, net_recv / seconds)
 
 internal = int(sys.argv[1])
 while True:
