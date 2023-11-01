@@ -7,10 +7,12 @@ from smb.SMBConnection import SMBConnection
 
 
 def mount_runes():
-    f = os.system('mount /dev/sda /root/runes')
-    print('mount /dev/sda /root/runes: %s' % f)
-    if f != 0:
-        sys.exit(1)
+    x = os.system('ls /root/runes')
+    if x != 0:
+        f = os.system('mount /dev/sda /root/runes')
+        print('mount /dev/sda /root/runes: %s' % f)
+        if f != 0:
+            sys.exit(1)
 
 
 def restart_dns():
@@ -55,15 +57,15 @@ def check_dns() -> bool:
 if __name__ == '__main__':
     print('-------------------- Mount Runes')
     mount_runes()
-    print('\n\n\n')
-
+    print('\n')
+    
     print('-------------------- Restart DNS')
     restart_dns()
-    print('\n\n\n')
+    print('\n')
 
     print('-------------------- Check Samba')
     print(check_samba())
-    print('\n\n\n')
+    print('\n')
 
     print('-------------------- Check DNS')
     print(check_dns())
