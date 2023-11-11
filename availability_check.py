@@ -7,8 +7,8 @@ from smb.SMBConnection import SMBConnection
 
 
 def mount_runes():
-    x = os.system('ls /root/runes')
-    if x != 0:
+    # x = os.system('ls /root/runes')
+    if True:
         f = os.system('mount /dev/sda /root/runes')
         print('mount /dev/sda /root/runes: %s' % f)
         if f != 0:
@@ -48,9 +48,9 @@ def check_dns() -> bool:
     print('ping route.home.lan %s' % r1)
     r2 = ping('m.home.lan')
     print('ping m.home.lan %s' % r2)
-    r3 = ping('cip.cc')
-    print('ping cip.cc %s' % r3)
-    os.system('curl cip.cc')
+    r3 = ping('www.baidu.com')
+    print('ping www.baidu.com %s' % r3)
+    os.system('curl www.baidu.com')
     return isinstance(r1, float) and isinstance(r2, float) and isinstance(r3, float)
 
 
