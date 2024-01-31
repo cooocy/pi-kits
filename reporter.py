@@ -23,7 +23,7 @@ def report():
             "memoryTotal": memory_total, "diskUsed": disk_used, "diskTotal": disk_total, "mount": mount, "smb": smb,
             "dns": dns}
 
-    requests.post("https://wormhole.dcyy.cc/yu/ca/report", data=json.dumps(body),
+    requests.post("https://wormhole.dcyy.cc/melina/ca/report", data=json.dumps(body),
                   headers={'Content-Type': 'application/json'})
 
 
