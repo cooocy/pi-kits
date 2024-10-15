@@ -1,12 +1,25 @@
 #!/usr/bin/python
+import datetime
+
 import availability_check
 import json
 import monitor
 import os
 import requests
-import schedule
+
+from schedule import every, repeat, run_pending
 
 
+@repeat(every().friday.at('07:00'))
+def restart():
+    now = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+    print("[%s]: Restarting..." % now)
+    with open('restart.log', 'a') as f:
+        f.write('[%s]: Restarting...\n' % now)
+    os.system('reboot')
+
+
+@repeat(every(60).seconds)
 def report():
     state = monitor.monitor(interval=1)
     cpu_rate = state.cpu_percent
@@ -28,7 +41,6 @@ def report():
 
 
 if __name__ == '__main__':
-    schedule.every(30).seconds.do(report)
+    # schedule.every(30).seconds.do(report)
     while True:
-        schedule.run_pending()
-
+        run_pending()
