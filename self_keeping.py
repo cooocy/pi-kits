@@ -48,7 +48,12 @@ def report():
         print(e)
 
 
+def mount_disks():
+    os.system('mount /dev/sda /root/runes')
+
+
 if __name__ == '__main__':
+    mount_disks()
     # schedule.every(30).seconds.do(report)
     while True:
         run_pending()
