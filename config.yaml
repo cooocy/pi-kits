@@ -1,0 +1,3 @@
+log:
+  runes-cleaner: logs/runes-cleaner.log
+  restart: logs/restart.log

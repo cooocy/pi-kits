@@ -58,7 +58,7 @@ if __name__ == '__main__':
     print('-------------------- Mount Runes')
     mount_runes()
     print('\n')
-    
+
     print('-------------------- Restart DNS')
     restart_dns()
     print('\n')

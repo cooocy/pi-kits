@@ -135,4 +135,3 @@ if __name__ == '__main__':
         is_pretty = False
     while True:
         print(monitor(internal, is_pretty))
-

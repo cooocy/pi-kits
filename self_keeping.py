@@ -1,24 +1,30 @@
 #!/usr/bin/python
-import datetime
 
-import availability_check
 import json
-import monitor
+
+import logger
 import os
 import requests
 
+from config_loader import restart, runes_cleaner
+from core import monitor, availability_check
 from schedule import every, repeat, run_pending
 
+from core.runes_cleaner import clean
 
+
+def runes_clean():
+    clean('/root/runes')
+
+
+# 每周五 07:00 重启, 避免严重故障.
 @repeat(every().friday.at('07:00'))
 def restart():
-    now = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
-    print("[%s]: Restarting..." % now)
-    with open('restart.log', 'a') as f:
-        f.write('[%s]: Restarting...\n' % now)
+    logger.log(restart, 'Restarting...')
     os.system('reboot')
 
 
+# 每 60s 报告宿主机状态.
 @repeat(every(60).seconds)
 def report():
     state = monitor.monitor(interval=1)

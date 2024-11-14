@@ -2,5 +2,6 @@ psutil==5.9.5
 pysmb==1.2.9.1
 ping3~=4.0.4
 requests==2.31.0
+PyYAML
 urllib3
 schedule
