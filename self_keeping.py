@@ -5,18 +5,11 @@ import logger
 import os
 import requests
 
-from config_loader import restart, runes_cleaner
+from config_loader import restart
 from core import monitor, availability_check
 from schedule import every, repeat, run_pending
 
 from core.runes_cleaner import clean
-
-
-def runes_clean():
-    try:
-        clean('/root/runes')
-    except Exception as e:
-        print(e)
 
 
 # 每周五 07:00 重启, 避免严重故障.
