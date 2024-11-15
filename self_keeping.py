@@ -17,7 +17,7 @@ def restart():
         LOGGER__.info('Machine Restarting ...')
         os.system('reboot')
     except Exception as e:
-        print(e)
+        LOGGER__.error('Machine Restarting Error. E: %s', e)
 
 
 # Every 60 seconds, report the states of the host machine.
@@ -40,9 +40,9 @@ def report():
                 "smb": samba_available,
                 "dns": dns_available}
         requests.post(report_url__, data=json.dumps(body), headers={'Content-Type': 'application/json'})
-        LOGGER__.info('Report Success. ', body)
+        LOGGER__.info('Report Success. Body: %s', body)
     except Exception as e:
-        LOGGER__.error('Report Error. ', e)
+        LOGGER__.error('Report Error. E: %s', e)
 
 
 if __name__ == '__main__':

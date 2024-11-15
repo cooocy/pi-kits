@@ -42,21 +42,21 @@ def clean(directory: str):
                     file_path = os.path.join(root, name)
                     try:
                         os.remove(file_path)
-                        LOGGER__.info('Deleted file:', file_path)
+                        LOGGER__.info('Deleted file: %s', file_path)
                     except OSError as e:
-                        LOGGER__.info('Error deleting file: %s, e: %s' % (file_path, e))
+                        LOGGER__.error('Error deleting file: %s, E: %s', file_path, e)
 
             for name in dirs:
                 if name.startswith('.'):
                     dir_path = os.path.join(root, name)
                     try:
                         shutil.rmtree(dir_path)
-                        LOGGER__.info('Deleted dir:', dir_path)
+                        LOGGER__.info('Deleted dir: %s', dir_path)
                     except OSError as e:
-                        LOGGER__.info('Error deleting dir: %s, e: %s' % (dir_path, e))
+                        LOGGER__.error('Error deleting dir: %s, E: %s', dir_path, e)
         t2 = time.time()
-        LOGGER__.info('Clean Const: %f' % (t2 - t1))
+        LOGGER__.info('Clean Const: %f', (t2 - t1))
     else:
-        LOGGER__.info('Directory does not exist or is not directory. dir:', directory)
+        LOGGER__.info('Directory does not exist or is not directory. dir: %s', directory)
 
     LOGGER__.info('Clean End.')
