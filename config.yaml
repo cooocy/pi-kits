@@ -1,6 +1,5 @@
-log:
-  runes-cleaner: logs/runes-cleaner.log
-  restart: logs/restart.log
+logger:
+  path: logs/all.log
 
 report_url: https://wormhole.dcyy.cc/melina/ca/report
 

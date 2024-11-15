@@ -1,7 +1,5 @@
 #!/usr/bin/python
-import config_loader
 import json
-import logger
 import os
 import requests
 
@@ -9,12 +7,14 @@ from config_loader import dns__, report_url__, runes__, samba__
 from core import dns, machine_monitor, runes, samba
 from schedule import every, repeat, run_pending
 
+from logger import LOGGER__
+
 
 # Weekly restart at 07:00 to avoid serious failures.
 @repeat(every().friday.at('07:00'))
 def restart():
     try:
-        logger.log(config_loader.restart, 'Restarting...')
+        LOGGER__.info('Machine Restarting ...')
         os.system('reboot')
     except Exception as e:
         print(e)
@@ -40,12 +40,14 @@ def report():
                 "smb": samba_available,
                 "dns": dns_available}
         requests.post(report_url__, data=json.dumps(body), headers={'Content-Type': 'application/json'})
-
+        LOGGER__.info('Report Success. ', body)
     except Exception as e:
-        print(e)
+        LOGGER__.error('Report Error. ', e)
 
 
 if __name__ == '__main__':
+    LOGGER__.info('Self Keeping Started.')
     runes.mount_runes(runes__.device, runes__.directory)
+    LOGGER__.info('Mount Runes End. The result is unknown.')
     while True:
         run_pending()

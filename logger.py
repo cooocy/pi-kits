@@ -1,17 +1,16 @@
-import kits
+import config_loader
+import logging
 import os
-import time
 
+logger_dir = config_loader.logger__.path.rsplit('/', 1)[0]
+if not os.path.exists(logger_dir):
+    os.makedirs(logger_dir)
 
-def log(path, *strs):
-    file = kits.current_path() + '/' + path
-    file_path = file[:file.rindex('/')]
-    if not os.path.exists(file_path):
-        os.mkdir(file_path)
-    s = time.strftime("%Y-%m-%dT%H:%M:%S", time.localtime())
-    for ss in strs:
-        s = s + ' ' + ss
-    with open(file, 'a+') as f:
-        f.write('\n')
-        f.write(s)
-    f.close()
+LOGGER__ = logging.getLogger()
+LOGGER__.setLevel(logging.INFO)
+
+file_handler = logging.FileHandler(config_loader.logger__.path)
+file_handler.setLevel(logging.INFO)
+formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+file_handler.setFormatter(formatter)
+LOGGER__.addHandler(file_handler)
