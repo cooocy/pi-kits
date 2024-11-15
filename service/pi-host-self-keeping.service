@@ -1,0 +1,13 @@
+[Unit]
+Description=pi host self keeping service
+After=network.target multi-user.target
+
+[Service]
+Type=simple
+WorkingDirectory=/root/apps/pi-kits # TODO Modify
+ExecStart=/bin/bash -c 'cd /root/apps/pi-kits && python self_keeping.py' # TODO Modify
+Restart=Always
+RestartSec=3
+
+[Install]
+WantedBy=multi-user.target
