@@ -1,3 +1,22 @@
 log:
   runes-cleaner: logs/runes-cleaner.log
   restart: logs/restart.log
+
+report_url: https://wormhole.dcyy.cc/melina/ca/report
+
+dns:
+  checked_domains:
+    - route.home.lan
+    - m.home.lan
+    - www.baidu.com
+    - cip.cc
+
+samba:
+  username: root
+  password: 940103
+  server_ip: 192.168.124.2
+  port: 445
+
+runes:
+  device: /dev/sda
+  directory: /root/runes

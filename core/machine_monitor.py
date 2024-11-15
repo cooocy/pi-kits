@@ -1,6 +1,8 @@
-#!/usr/bin/python
+"""
+Monitor the basic information of the host machine. e.g.
+cpu, memory, disk.
+"""
 import psutil
-import sys
 from datetime import datetime
 
 
@@ -78,13 +80,14 @@ class PrettyState:
             self.disk_free, self.disk_percent, self.net_sent, self.net_recv)
 
 
-def monitor(interval, is_pretty=False):
+def monitor(interval, directory, is_pretty=False):
     """
     Monitor the CPU, Mem, Disk, Network every {interval} second.
     call e.g.
     while True:
       print(monitor(1))
     :param interval: seconds
+    :param directory: the directory to monitor
     :param is_pretty: pretty format
     :return: system utilization of cpu, mem, disk and net sent/recv speed.
       e.g. State(cpu_count: 8, cpu_percent: 15.51%, mem_total: 32768.00MB,
@@ -109,7 +112,7 @@ def monitor(interval, is_pretty=False):
     mem_percent = memory.percent
 
     # Disk
-    disk = psutil.disk_usage('/root/runes')
+    disk = psutil.disk_usage(directory)
     disk_total = disk.total
     disk_free = disk.free
     disk_percent = 100 * (disk_total - disk_free) / disk_total
@@ -126,12 +129,3 @@ def monitor(interval, is_pretty=False):
     else:
         return State(cpu_count, cpu_percent, cpu_temp, mem_total, mem_free, mem_percent, disk_total, disk_free,
                      disk_percent, net_sent / seconds, net_recv / seconds)
-
-
-if __name__ == '__main__':
-    internal = int(sys.argv[1])
-    is_pretty = int(sys.argv[2]) == 1
-    if is_pretty is None:
-        is_pretty = False
-    while True:
-        print(monitor(internal, is_pretty))
