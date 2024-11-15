@@ -1,11 +1,12 @@
 #!/usr/bin/python
 
 import json
+
+import config_loader
 import logger
 import os
 import requests
 
-from config_loader import restart
 from core import monitor, availability_check
 from schedule import every, repeat, run_pending
 
@@ -16,7 +17,7 @@ from core.runes_cleaner import clean
 @repeat(every().friday.at('07:00'))
 def restart():
     try:
-        logger.log(restart, 'Restarting...')
+        logger.log(config_loader.restart, 'Restarting...')
         os.system('reboot')
     except Exception as e:
         print(e)
