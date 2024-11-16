@@ -1,8 +1,9 @@
+import l
 import os
 import shutil
 import time
 
-from logger import LOGGER__
+L = l.get_logger('runes')
 
 
 def mount_runes(device: str, directory: str):
@@ -33,7 +34,7 @@ def clean(directory: str):
     :param directory: directory
     :return: None
     """
-    LOGGER__.info('Clean Begin ......')
+    L.info('Clean Begin ......')
     if os.path.exists(directory) and os.path.isdir(directory):
         t1 = time.time()
         for root, dirs, files in os.walk(directory, topdown=False):
@@ -42,21 +43,21 @@ def clean(directory: str):
                     file_path = os.path.join(root, name)
                     try:
                         os.remove(file_path)
-                        LOGGER__.info('Deleted file: %s', file_path)
+                        L.info('Deleted file: %s', file_path)
                     except OSError as e:
-                        LOGGER__.error('Error deleting file: %s, E: %s', file_path, e)
+                        L.error('Error deleting file: %s, E: %s', file_path, e)
 
             for name in dirs:
                 if name.startswith('.'):
                     dir_path = os.path.join(root, name)
                     try:
                         shutil.rmtree(dir_path)
-                        LOGGER__.info('Deleted dir: %s', dir_path)
+                        L.info('Deleted dir: %s', dir_path)
                     except OSError as e:
-                        LOGGER__.error('Error deleting dir: %s, E: %s', dir_path, e)
+                        L.error('Error deleting dir: %s, E: %s', dir_path, e)
         t2 = time.time()
-        LOGGER__.info('Clean Const: %f', (t2 - t1))
+        L.info('Clean Const: %f', (t2 - t1))
     else:
-        LOGGER__.info('Directory does not exist or is not directory. dir: %s', directory)
+        L.info('Directory does not exist or is not directory. dir: %s', directory)
 
-    LOGGER__.info('Clean End.')
+    L.info('Clean End.')

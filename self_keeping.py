@@ -1,5 +1,6 @@
 #!/usr/bin/python
 import json
+import l
 import os
 import requests
 
@@ -7,17 +8,17 @@ from config_loader import dns__, report_url__, runes__, samba__
 from core import dns, machine_monitor, runes, samba
 from schedule import every, repeat, run_pending
 
-from logger import LOGGER__
+L = l.get_logger('self_keeping')
 
 
 # Weekly restart at 07:00 to avoid serious failures.
 @repeat(every().friday.at('07:00'))
 def restart():
     try:
-        LOGGER__.info('Machine Restarting ...')
+        L.info('Machine Restarting ...')
         os.system('reboot')
     except Exception as e:
-        LOGGER__.error('Machine Restarting Error. E: %s', e)
+        L.error('Machine Restarting Error. E: %s', e)
 
 
 # Every 60 seconds, report the states of the host machine.
@@ -40,14 +41,14 @@ def report():
                 "smb": samba_available,
                 "dns": dns_available}
         requests.post(report_url__, data=json.dumps(body), headers={'Content-Type': 'application/json'})
-        LOGGER__.info('Report Success. Body: %s', body)
+        L.info('Report Success. Body: %s', body)
     except Exception as e:
-        LOGGER__.error('Report Error. E: %s', e)
+        L.error('Report Error. E: %s', e)
 
 
 if __name__ == '__main__':
-    LOGGER__.info('Self Keeping Started.')
+    L.info('Self Keeping Started.')
     runes.mount_runes(runes__.device, runes__.directory)
-    LOGGER__.info('Mount Runes End. The result is unknown.')
+    L.info('Mount Runes End. The result is unknown.')
     while True:
         run_pending()
