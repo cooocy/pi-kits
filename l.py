@@ -2,20 +2,24 @@ import config_loader
 import logging
 import os
 
+from config_loader import logger__
+from logging.handlers import RotatingFileHandler
+
 # Make log dir if not exists.
-logger_dir = config_loader.logger__.path.rsplit('/', 1)[0]
+logger_dir = logger__.path.rsplit('/', 1)[0]
 if not os.path.exists(logger_dir):
     os.makedirs(logger_dir)
 
-# Define common file handler.
-common_file_handler = logging.FileHandler(config_loader.logger__.path)
-common_file_handler.setLevel(logging.INFO)
-common_file_handler.setFormatter(logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s'))
+# Define rotating file handler.
+rotating_file_handler = RotatingFileHandler(logger__.path, maxBytes=logger__.max_bytes,
+                                            backupCount=logger__.backup_count)
+rotating_file_handler.setLevel(logging.INFO)
+rotating_file_handler.setFormatter(logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s'))
 
 # Define root logger.
 __ROOT_LOGGER = logging.getLogger()
 __ROOT_LOGGER.setLevel(logging.INFO)
-__ROOT_LOGGER.addHandler(common_file_handler)
+__ROOT_LOGGER.addHandler(rotating_file_handler)
 
 # Close some loggers, since it has too many logs.
 __SMB_LOGGER = logging.getLogger('SMB.SMBConnection')

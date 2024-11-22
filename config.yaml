@@ -1,5 +1,7 @@
 logger:
   path: logs/all.log
+  max_bytes: 4194304    # 4mb
+  backup_count: 5
 
 report_url: https://wormhole.dcyy.cc/melina/ca/report
 
