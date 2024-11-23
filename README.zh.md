@@ -30,7 +30,7 @@ pip3 install -r requirements
 
 ### Step 4: 创建并启动系统服务
 
-1. 修改服务文件 `service/pi-host-self-keeping.service` 中的 `TODO`。
+1. 修改服务文件 `pi-host-self-keeping.service` 中的 `TODO`。
 
 2. 拷贝修改后的服务文件至宿主机的 `/etc/systemd/system/` 目录。
 

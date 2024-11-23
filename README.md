@@ -30,7 +30,7 @@ Modify the configigurations in `config.yaml`.
 
 ### Step 4: Create and start system service
 
-1. Modify the service file `service/pi-host-self-keeping.service` with `TODO`.
+1. Modify the service file `pi-host-self-keeping.service` with `TODO`.
 
 2. Copy the modified service file to the directory `/etc/systemd/system/` in your host machine.
 
