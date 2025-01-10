@@ -42,7 +42,10 @@ __configurations = __load_config()
 
 logger__ = Logger(__configurations['logger']['path'], __configurations['logger']['max_bytes'],
                   __configurations['logger']['backup_count'])
-report_url__ = __configurations['report_url']
+status_report_url__ = __configurations['status_report_url']
+restart_plan_pick_url__ = __configurations['restart_plan_pick_url']
+restart_record_report_url__ = __configurations['restart_record_report_url']
+
 dns__ = DNS(__configurations['dns']['checked_domains'])
 samba__ = Samba(__configurations['samba']['username'], str(__configurations['samba']['password']),
                 __configurations['samba']['server_ip'], __configurations['samba']['port'])

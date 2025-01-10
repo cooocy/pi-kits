@@ -9,6 +9,7 @@
 - Check DNS available
 - Check Samba available
 - Scheduled restart
+- Planned restart
 - Scheduled machine indicator report
 - Hidden files clean
 

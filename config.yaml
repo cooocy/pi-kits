@@ -3,7 +3,9 @@ logger:
   max_bytes: 4194304    # 4mb
   backup_count: 5
 
-report_url: https://wormhole.dcyy.cc/melina/ca/report
+status_report_url: https://wormhole.dcyy.cc/melina/ca/status/report
+restart_plan_pick_url: https://wormhole.dcyy.cc/melina/ca/boot-plan/pick
+restart_record_report_url: https://wormhole.dcyy.cc/melina/ca/boot-record/report
 
 dns:
   checked_domains:
