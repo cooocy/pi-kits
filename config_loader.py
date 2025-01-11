@@ -11,23 +11,31 @@ class Logger:
     backup_count: int
 
 
+@dataclass
+class Reporter:
+    base_url: str
+    status_report_uri: str
+    boot_plan_pick_uri: str
+    boot_record_report_uri: str
+
+
+@dataclass
 class DNS:
-    def __init__(self, checked_domains: List[str]):
-        self.checked_domains = checked_domains
+    checked_domains: List[str]
 
 
+@dataclass
 class Samba:
-    def __init__(self, username: str, password: str, server_ip: str, port: int):
-        self.username = username
-        self.password = password
-        self.server_ip = server_ip
-        self.port = port
+    username: str
+    password: str
+    server_ip: str
+    port: int
 
 
+@dataclass
 class Runes:
-    def __init__(self, device: str, directory: str):
-        self.device = device
-        self.directory = directory
+    device: str
+    directory: str
 
 
 def __load_config():
@@ -40,11 +48,13 @@ def __load_config():
 
 __configurations = __load_config()
 
-logger__ = Logger(__configurations['logger']['path'], __configurations['logger']['max_bytes'],
+logger__ = Logger(__configurations['logger']['path'],
+                  __configurations['logger']['max_bytes'],
                   __configurations['logger']['backup_count'])
-status_report_url__ = __configurations['status_report_url']
-restart_plan_pick_url__ = __configurations['restart_plan_pick_url']
-restart_record_report_url__ = __configurations['restart_record_report_url']
+reporter__ = Reporter(__configurations['reporter']['base_url'],
+                      __configurations['reporter']['status_report_uri'],
+                      __configurations['reporter']['boot_plan_pick_uri'],
+                      __configurations['reporter']['boot_record_report_uri'])
 
 dns__ = DNS(__configurations['dns']['checked_domains'])
 samba__ = Samba(__configurations['samba']['username'], str(__configurations['samba']['password']),

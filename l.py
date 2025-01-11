@@ -14,7 +14,7 @@ if not os.path.exists(logger_dir):
 rotating_file_handler = RotatingFileHandler(logger__.path, maxBytes=logger__.max_bytes,
                                             backupCount=logger__.backup_count)
 rotating_file_handler.setLevel(logging.INFO)
-rotating_file_handler.setFormatter(logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s'))
+rotating_file_handler.setFormatter(logging.Formatter('%(asctime)s || %(levelname)s || %(name)s || %(funcName)s || %(message)s'))
 
 # Define root logger.
 __ROOT_LOGGER = logging.getLogger()
