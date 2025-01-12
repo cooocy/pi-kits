@@ -55,6 +55,27 @@ def planned_restart():
 # Every 60 seconds, report the states of the host machine.
 @repeat(every(60).seconds)
 def report_status():
+    def ext_available():
+        __mounted = False
+        __samba_available = False
+        __dns_available = False
+        try:
+            __mounted = runes.is_non_empty(runes__.directory)
+        except Exception as e:
+            L.error('Mounted Available Error. E: %s', e)
+            __mounted = False
+        try:
+            __samba_available = samba.available(samba__.username, samba__.password, samba__.server_ip, samba__.port)
+        except Exception as e:
+            L.error('Samba Available Error. E: %s', e)
+            __samba_available = False
+        try:
+            __dns_available = dns.available(dns__.checked_domains)
+        except Exception as e:
+            L.error('DNS Available Error. E: %s', e)
+            __dns_available = False
+        return __mounted, __samba_available, __dns_available
+
     try:
         state = machine_monitor.monitor(interval=1, directory=runes__.directory)
         cpu_rate = state.cpu_percent
@@ -63,10 +84,8 @@ def report_status():
         memory_total = state.mem_total
         disk_used = state.disk_total - state.disk_free
         disk_total = state.disk_total
+        mounted, samba_available, dns_available = ext_available()
 
-        mounted = runes.is_non_empty(runes__.directory)
-        samba_available = samba.available(samba__.username, samba__.password, samba__.server_ip, samba__.port)
-        dns_available = dns.available(dns__.checked_domains)
         body = {
             "cpuRate": cpu_rate,
             "cpuTemperature": cpu_temperature,
