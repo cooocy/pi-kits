@@ -25,3 +25,9 @@ samba:
 runes:
   device: /dev/sda
   directory: /root/runes
+
+lan_scanner:
+  ip_range: 10.3.23.1/24
+  known_devices:
+    - mac: d2:4e:a7:e8:bc:4f
+      name: Marika

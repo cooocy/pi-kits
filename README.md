@@ -6,12 +6,17 @@
 
 ## Features and Goals
 
-- Check DNS available
-- Check Samba available
-- Scheduled restart
-- Planned restart
-- Scheduled machine indicator report
-- Hidden files clean
+- Self Status
+    - Check DNS available
+    - Check Samba available
+    - Hidden files clean
+
+- Restart
+    - Scheduled restart
+    - Planned restart
+
+- LAN
+    - Scan Online Devices
 
 ## Installation and Running
 

@@ -4,8 +4,8 @@ import l
 import os
 import requests
 
-from config_loader import dns__, reporter__, runes__, samba__
-from core import dns, machine_monitor, runes, samba
+from config_loader import dns__, reporter__, runes__, samba__, lan_scanner__
+from core import dns, machine_monitor, runes, samba, lan_scanner
 from schedule import every, repeat, run_pending
 
 L = l.get_logger('self_keeping')
@@ -54,7 +54,7 @@ def planned_restart():
 
 # Every 60 seconds, report the states of the host machine.
 @repeat(every(60).seconds)
-def report_status():
+def report_self_status():
     def ext_available():
         __mounted = False
         __samba_available = False
@@ -103,6 +103,12 @@ def report_status():
         L.info('Status Report Success. Body: %s', body)
     except Exception as e:
         L.error('Status Report Error. E: %s', e)
+
+
+# Every 100 seconds, report the states of LAN Online Devices.
+# @repeat(every(100).seconds)
+def report_online_devices():
+    devices = lan_scanner.scan_online_devices(lan_scanner__['ip_range'], lan_scanner__['known_devices'])
 
 
 if __name__ == '__main__':

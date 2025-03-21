@@ -60,3 +60,5 @@ dns__ = DNS(__configurations['dns']['checked_domains'])
 samba__ = Samba(__configurations['samba']['username'], str(__configurations['samba']['password']),
                 __configurations['samba']['server_ip'], __configurations['samba']['port'])
 runes__ = Runes(__configurations['runes']['device'], __configurations['runes']['directory'])
+
+lan_scanner__ = __configurations['lan_scanner']
