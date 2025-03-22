@@ -5,9 +5,9 @@ logger:
 
 reporter:
   base_url: https://wormhole.dcyy.cc/melina
-  status_report_uri: /ca/status/report
-  boot_plan_pick_uri: /ca/boot-plan/pick
-  boot_record_report_uri: /ca/boot-record/report
+  status_report_uri: /home/ca/status/report
+  boot_plan_pick_uri: /home/ca/boot-plan/pick
+  boot_record_report_uri: /home/ca/boot-record/report
 
 dns:
   checked_domains:
