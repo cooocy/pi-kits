@@ -8,6 +8,7 @@ reporter:
   status_report_uri:
   boot_plan_pick_uri:
   boot_record_report_uri:
+  lan_status_report_uri:
 
 dns:
   checked_domains:
@@ -31,3 +32,8 @@ lan_scanner:
   known_devices:
     - mac: d2:4e:a7:e8:bc:4f
       name: Marika
+
+h3c:
+  username:
+  password:
+  server: http://route.home.lan

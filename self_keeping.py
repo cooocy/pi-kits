@@ -4,8 +4,8 @@ import l
 import os
 import requests
 
-from config_loader import dns__, reporter__, runes__, samba__, lan_scanner__
-from core import dns, machine_monitor, runes, samba, lan_scanner
+from config_loader import dns__, reporter__, runes__, samba__, lan_scanner__, h3c__
+from core import dns, machine_monitor, runes, samba, lan_scanner, h3c
 from schedule import every, repeat, run_pending
 
 L = l.get_logger('self_keeping')
@@ -106,9 +106,21 @@ def report_self_status():
 
 
 # Every 100 seconds, report the states of LAN Online Devices.
-# @repeat(every(100).seconds)
+@repeat(every(100).seconds)
 def report_online_devices():
-    devices = lan_scanner.scan_online_devices(lan_scanner__['ip_range'], lan_scanner__['known_devices'])
+    try:
+        devices = h3c.scan_online_devices(h3c_config=h3c__)
+        online_devices = []
+        for device in devices:
+            d = {'name': device['hostname'], 'mac': device['mac'], 'ip': device['ip']}
+            online_devices.append(d)
+        body = {'onlineDevices': online_devices}
+        requests.post(url=reporter__.base_url + reporter__.lan_status_report_uri,
+                      data=json.dumps(body),
+                      headers=post_headers)
+        L.info('Online Devices Report Success. Body: %s', body)
+    except Exception as e:
+        L.error('Online Devices Report Error. E: %s', e)
 
 
 if __name__ == '__main__':
