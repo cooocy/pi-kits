@@ -4,10 +4,10 @@ logger:
   backup_count: 5
 
 reporter:
-  base_url: https://wormhole.dcyy.cc/melina
-  status_report_uri: /home/ca/status/report
-  boot_plan_pick_uri: /home/ca/boot-plan/pick
-  boot_record_report_uri: /home/ca/boot-record/report
+  base_url:
+  status_report_uri:
+  boot_plan_pick_uri:
+  boot_record_report_uri:
 
 dns:
   checked_domains:
@@ -18,7 +18,7 @@ dns:
 
 samba:
   username: root
-  password: 940103
+  password:
   server_ip: 192.168.124.2
   port: 445
 

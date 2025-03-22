@@ -40,7 +40,7 @@ class Runes:
 
 def __load_config():
     current_path = kits.current_path()
-    f = open(current_path + '/config.yaml')
+    f = open(current_path + '/config_private.yaml')
     y = yaml.safe_load(f)
     f.close()
     return y
