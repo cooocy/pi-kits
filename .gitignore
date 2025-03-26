@@ -2,4 +2,4 @@ venv
 .idea
 *.log
 __pycache__/
-config_private.yaml
+config/app_private.yaml

@@ -1,20 +1,20 @@
-import config_loader
 import logging
 import os
 
-from config_loader import logger__
+from config import logger_configurations
 from logging.handlers import RotatingFileHandler
 
 # Make log dir if not exists.
-logger_dir = logger__.path.rsplit('/', 1)[0]
+logger_dir = logger_configurations['path'].rsplit('/', 1)[0]
 if not os.path.exists(logger_dir):
     os.makedirs(logger_dir)
 
 # Define rotating file handler.
-rotating_file_handler = RotatingFileHandler(logger__.path, maxBytes=logger__.max_bytes,
-                                            backupCount=logger__.backup_count)
+rotating_file_handler = RotatingFileHandler(logger_configurations['path'], maxBytes=logger_configurations['max_bytes'],
+                                            backupCount=logger_configurations['backup_count'])
 rotating_file_handler.setLevel(logging.INFO)
-rotating_file_handler.setFormatter(logging.Formatter('%(asctime)s || %(levelname)s || %(name)s || %(funcName)s || %(message)s'))
+rotating_file_handler.setFormatter(
+    logging.Formatter('%(asctime)s || %(levelname)s || %(name)s || %(funcName)s || %(message)s'))
 
 # Define root logger.
 __ROOT_LOGGER = logging.getLogger()

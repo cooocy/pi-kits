@@ -4,8 +4,9 @@ import l
 import os
 import requests
 
-from config_loader import dns__, reporter__, runes__, samba__, lan_scanner__, h3c__
-from core import dns, machine_monitor, runes, samba, lan_scanner, h3c
+from config import dns_configurations, reporter_configurations, runes_configurations, samba_configurations, \
+    h3c_configurations
+from core import dns, machine_monitor, runes, samba, h3c
 from schedule import every, repeat, run_pending
 
 L = l.get_logger('self_keeping')
@@ -17,7 +18,7 @@ post_headers = {'Content-Type': 'application/json'}
 def restart():
     try:
         body = {'note': 'Scheduled Restart'}
-        requests.post(url=reporter__.base_url + reporter__.boot_record_report_uri,
+        requests.post(url=reporter_configurations['base_url'] + reporter_configurations['boot_record_report_uri'],
                       data=json.dumps(body),
                       headers=post_headers)
         L.info('Scheduled Restarting ...')
@@ -30,9 +31,10 @@ def restart():
 @repeat(every(43).seconds)
 def planned_restart():
     try:
-        restart_plan_response = requests.post(url=reporter__.base_url + reporter__.boot_plan_pick_uri,
-                                              data=json.dumps({}),
-                                              headers=post_headers)
+        restart_plan_response = requests.post(
+            url=reporter_configurations['base_url'] + reporter_configurations['boot_plan_pick_uri'],
+            data=json.dumps({}),
+            headers=post_headers)
         if restart_plan_response.status_code == 200:
             restart_plan_response_body = restart_plan_response.json()
             if restart_plan_response_body['data'] is None:
@@ -41,9 +43,10 @@ def planned_restart():
                 plan = restart_plan_response_body['data']
                 L.info('Pick Restart Plan Success. %s', plan)
                 body = {'note': plan['note']}
-                requests.post(url=reporter__.base_url + reporter__.boot_record_report_uri,
-                              data=json.dumps(body),
-                              headers=post_headers)
+                requests.post(
+                    url=reporter_configurations['base_url'] + reporter_configurations['boot_record_report_uri'],
+                    data=json.dumps(body),
+                    headers=post_headers)
                 L.info('Report Restart Record Success. Body: %s', body)
                 L.info('Planned Restarting...')
                 os.system('reboot')
@@ -60,24 +63,26 @@ def report_self_status():
         __samba_available = False
         __dns_available = False
         try:
-            __mounted = runes.is_non_empty(runes__.directory)
+            __mounted = runes.is_non_empty(runes_configurations['directory'])
         except Exception as e:
             L.error('Mounted Available Error. E: %s', e)
             __mounted = False
         try:
-            __samba_available = samba.available(samba__.username, samba__.password, samba__.server_ip, samba__.port)
+            __samba_available = samba.available(samba_configurations['username'], samba_configurations['password'],
+                                                samba_configurations['server_ip'],
+                                                samba_configurations['port'])
         except Exception as e:
             L.error('Samba Available Error. E: %s', e)
             __samba_available = False
         try:
-            __dns_available = dns.available(dns__.checked_domains)
+            __dns_available = dns.available(dns_configurations['checked_domains'])
         except Exception as e:
             L.error('DNS Available Error. E: %s', e)
             __dns_available = False
         return __mounted, __samba_available, __dns_available
 
     try:
-        state = machine_monitor.monitor(interval=1, directory=runes__.directory)
+        state = machine_monitor.monitor(interval=1, directory=runes_configurations['directory'])
         cpu_rate = state.cpu_percent
         cpu_temperature = state.cpu_temp
         memory_used = state.mem_total - state.mem_free
@@ -97,7 +102,7 @@ def report_self_status():
             "smb": samba_available,
             "dns": dns_available
         }
-        requests.post(url=reporter__.base_url + reporter__.status_report_uri,
+        requests.post(url=reporter_configurations['base_url'] + reporter_configurations['status_report_uri'],
                       data=json.dumps(body),
                       headers=post_headers)
         L.info('Status Report Success. Body: %s', body)
@@ -109,13 +114,13 @@ def report_self_status():
 @repeat(every(100).seconds)
 def report_online_devices():
     try:
-        devices = h3c.scan_online_devices(h3c_config=h3c__)
+        devices = h3c.scan_online_devices(h3c_config=h3c_configurations)
         online_devices = []
         for device in devices:
             d = {'name': device['hostname'], 'mac': device['mac'], 'ip': device['ip']}
             online_devices.append(d)
         body = {'onlineDevices': online_devices}
-        requests.post(url=reporter__.base_url + reporter__.lan_status_report_uri,
+        requests.post(url=reporter_configurations['base_url'] + reporter_configurations['lan_status_report_uri'],
                       data=json.dumps(body),
                       headers=post_headers)
         L.info('Online Devices Report Success. Body: %s', body)
@@ -125,7 +130,7 @@ def report_online_devices():
 
 if __name__ == '__main__':
     L.info('Self Keeping Started.')
-    runes.mount_runes(runes__.device, runes__.directory)
+    runes.mount_runes(runes_configurations['device'], runes_configurations['directory'])
     L.info('Mount Runes End. The result is unknown.')
     while True:
         run_pending()
