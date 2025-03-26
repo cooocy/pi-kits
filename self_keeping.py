@@ -10,7 +10,7 @@ from core import dns, machine_monitor, runes, samba, h3c
 from schedule import every, repeat, run_pending
 
 L = l.get_logger('self_keeping')
-post_headers = {'Content-Type': 'application/json'}
+post_headers = {'Content-Type': 'application/json', reporter_configurations['header']: reporter_configurations['token']}
 
 
 # Weekly restart at 07:00 to avoid serious failures.

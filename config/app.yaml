@@ -4,6 +4,8 @@ logger:
   backup_count: 5
 
 reporter:
+  header: 'X-Application-Token'
+  token: ''
   base_url:
   status_report_uri:
   boot_plan_pick_uri:
