@@ -117,7 +117,10 @@ def report_online_devices():
         devices = h3c.scan_online_devices(h3c_config=h3c_configurations)
         online_devices = []
         for device in devices:
-            d = {'name': device['hostname'], 'mac': device['mac'], 'ip': device['ip']}
+            name = device.get('remark', '')
+            if name == '':
+                name = device.get('hostname', '')
+            d = {'name': name, 'mac': device['mac'], 'ip': device['ip']}
             online_devices.append(d)
         body = {'onlineDevices': online_devices}
         requests.post(url=reporter_configurations['base_url'] + reporter_configurations['lan_status_report_uri'],
