@@ -1,22 +1,41 @@
+import json
+
 import l
 import os
 import shutil
+import subprocess
 import time
 
 L = l.get_logger('runes')
 
 
-def mount_runes(device: str, directory: str):
+def mount_runes(directory: str):
     """
     Mount Runes.
+    If there is only one unmounted device, mount it.
     Errors will be ignored.
-    :param device: device
     :param directory: directory
     :return: None
     """
-    cmd = f'mount {device} {directory}'
-    os.system(cmd)
-    # if error, stdout will print errors.
+
+    stdout = subprocess.run(['lsblk', '--json'], capture_output=True, text=True, check=True).stdout
+    block_devices: dict = json.loads(stdout)
+    bd = block_devices.get('blockdevices', [])
+    not_mounted = [b for b in bd if b['mountpoint'] is None and 'children' not in b]
+    if len(not_mounted) == 0:
+        L.info('No unmounted devices found.')
+        return
+
+    L.info(f'Found unmounted devices, size: {len(not_mounted)}, details: {not_mounted}')
+    # if there is only one unmounted device, mount it.
+    # {"name":"sdb", "maj:min":"8:16", "rm":false, "size":"3.6T", "ro":false, "type":"disk", "mountpoint":"/root/runes"}
+    if len(not_mounted) == 1:
+        device = f'/dev/{not_mounted[0]["name"]}'
+        os.system(f'mount {device} {directory}')
+        L.info(f'Mount Runes Success. Device: {device}, Directory: {directory}')
+        # if error, stdout will print errors.
+    else:
+        L.info('There are multiple unmounted devices. Please mount them manually.')
 
 
 def is_non_empty(directory: str) -> bool:

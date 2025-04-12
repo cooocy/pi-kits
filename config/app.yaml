@@ -26,7 +26,6 @@ samba:
   port: 445
 
 runes:
-  device: /dev/sda
   directory: /root/runes
 
 lan_scanner:

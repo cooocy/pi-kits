@@ -3,3 +3,4 @@ venv
 *.log
 __pycache__/
 config/app_private.yaml
+.DS_Store

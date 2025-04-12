@@ -62,11 +62,24 @@ def report_self_status():
         __mounted = False
         __samba_available = False
         __dns_available = False
+
+        # Check if runes is mounted.
         try:
             __mounted = runes.is_non_empty(runes_configurations['directory'])
         except Exception as e:
             L.error('Mounted Available Error. E: %s', e)
             __mounted = False
+
+        # If not mounted, try to mount it.
+        if not __mounted:
+            try:
+                runes.mount_runes(runes_configurations['directory'])
+                __mounted = runes.is_non_empty(runes_configurations['directory'])
+            except Exception as e:
+                L.error('Mounted Error or Mounted Available Error. E: %s', e)
+                __mounted = False
+
+        # Check if samba is available.
         try:
             __samba_available = samba.available(samba_configurations['username'], samba_configurations['password'],
                                                 samba_configurations['server_ip'],
@@ -74,11 +87,14 @@ def report_self_status():
         except Exception as e:
             L.error('Samba Available Error. E: %s', e)
             __samba_available = False
+
+        # Check if dns is available.
         try:
             __dns_available = dns.available(dns_configurations['checked_domains'])
         except Exception as e:
             L.error('DNS Available Error. E: %s', e)
             __dns_available = False
+
         return __mounted, __samba_available, __dns_available
 
     try:
@@ -133,7 +149,12 @@ def report_online_devices():
 
 if __name__ == '__main__':
     L.info('Self Keeping Started.')
-    runes.mount_runes(runes_configurations['device'], runes_configurations['directory'])
-    L.info('Mount Runes End. The result is unknown.')
+
+    try:
+        runes.mount_runes(runes_configurations['directory'])
+        L.info('Mount Runes Success after Staring.')
+    except Exception as e:
+        L.error('Mount Runes Error after Staring. E: %s', e)
+
     while True:
         run_pending()
