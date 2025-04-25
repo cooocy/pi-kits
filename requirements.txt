@@ -6,3 +6,4 @@ PyYAML
 urllib3
 schedule
 scapy
+toml

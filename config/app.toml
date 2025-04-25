@@ -1,0 +1,37 @@
+[logger]
+path = "logs/all.log"
+max_bytes = 4194304
+backup_count = 5
+
+[reporter]
+header = "X-Application-Token"
+token = ""
+base_url = ""
+status_report_uri = "/home/ca/status/report"
+boot_plan_pick_uri = "/home/ca/boot-plan/pick"
+boot_record_report_uri = "/home/ca/boot-record/report"
+lan_status_report_uri = "/home/lan/status/report"
+
+[dns]
+checked_domains = [ "route.home.lan", "m.home.lan", "www.baidu.com", "cip.cc" ]
+
+[samba]
+username = ""
+password = ""
+server_ip = "192.168.124.2"
+port = 445
+
+[runes]
+directory = "/root/runes"
+
+[lan_scanner]
+ip_range = "10.3.23.1/24"
+
+[[lan_scanner.known_devices]]
+mac = "d2:4e:a7:e8:bc:4f"
+name = "Marika"
+
+[h3c]
+username = "admin"
+password = "admin"
+server = "http://route.home.lan"

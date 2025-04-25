@@ -1,6 +1,7 @@
-from config.loader import load_yaml_configurations
+from config.loader import load_online_configurations, load_yaml_configurations, Formats, load_toml_configurations
 
-app_configurations = load_yaml_configurations('config/app_private.yaml')
+# app_configurations = load_online_configurations('pi-kits/app-:tail.toml', Formats.TOML)
+app_configurations = load_toml_configurations('config/app-local.toml')
 logger_configurations = app_configurations['logger']
 reporter_configurations = app_configurations['reporter']
 dns_configurations = app_configurations['dns']
